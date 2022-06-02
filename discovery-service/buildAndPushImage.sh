@@ -2,6 +2,5 @@
 
 mvn package
 
-docker build -t art.local:8081/docker-local/guestbook-microservices-k8s/discovery-service:latest .
-
-docker push art.local:8081/docker-local/guestbook-microservices-k8s/discovery-service:latest
+docker build -t goharbor.com/demo/discovery-service:latest .
+docker push goharbor.com/demo/discovery-service:latest

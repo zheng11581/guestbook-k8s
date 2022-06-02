@@ -1,0 +1,75 @@
+import java.text.SimpleDateFormat;
+pipeline {
+
+    agent {
+        kubernetes {
+            defaultContainer 'maven'
+            yamlFile 'maven-3.8.4-openjdk-11.yaml'
+        }
+    }
+
+    environment {     
+        DATED_GIT_HASH = "${new SimpleDateFormat("yyMMddHHmmss").format(new Date())}${GIT_COMMIT.take(6)}"    
+    }
+
+    stages {
+
+        stage('Code Clone') {
+            
+            steps {
+                echo "1. Clone Code Stage"
+                git branch: 'master', credentialsId: '9daed3a9-3456-4e91-8021-19bba6fa25ff', url: 'https://gitee.com/zheng11581/cloudnative.git'
+            }
+        }
+
+        stage('Run Maven') {
+            
+            steps {
+                echo "2. Build Jar Stage"
+                sh 'mvn package'
+            }
+
+        }
+
+        // stage('Build Image') {
+        //     steps {
+        //         echo "3.Build Image Stage"
+        //         container('clean-ci'){
+        //             sh "docker build -t core.harbor.domain/gene/genecloud:${commit_id} ./gene/GeneCloud/"
+        //         }
+                
+        //     }
+
+        // }
+
+        // stage('Push Image') {
+        //     steps {
+        //         echo "4.Push Image Stage"
+        //         container('clean-ci') {
+        //             withCredentials([usernamePassword(credentialsId: '63175724-81b9-4c17-a1d3-e7d3b0e7dcfb', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        //                 sh "docker login harbor-external.default -u ${dockerHubUser} -p ${dockerHubPassword}"
+        //                 sh "docker push core.harbor.domain/gene/genecloud:${COMMIT_ID}"
+        //             }
+        //         }
+
+        //     }
+
+        // }
+
+        stage('Build with Kaniko') {          
+            steps {    
+                echo "4. Build with Kaniko"       
+                container('kaniko') {             
+                    sh '/kaniko/executor \
+                    --dockerfile=`pwd`/discovery-service/Dockerfile \
+                    --context=`pwd`/discovery-service/ \
+                    --destination=goharbor.com/demo/discovery-service/:${DATED_GIT_HASH} \
+                    --insecure \
+                    --skip-tls-verify  \
+                    -v=debug' 
+                }         
+            }     
+        } 
+
+    }
+}

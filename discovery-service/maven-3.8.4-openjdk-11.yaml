@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: devops
+spec:
+  serviceAccountName: jenkins
+  imagePullSecrets:
+    - name: regcred-ali
+  containers:
+    - name: maven
+      image: maven:3.8-eclipse-temurin-11
+      command:
+        - cat
+      tty: true
+      resources:
+        limits:
+          memory: "2Gi"
+          cpu: "1"
+        requests:
+          memory: "1Gi"
+          cpu: "500m"
+      volumeMounts:
+        - name: maven-repos
+          subPath: repository
+          mountPath: /root/.m2/repository
+        - name: maven-settings
+          mountPath: /root/.m2/
+
+    # - name: dind
+    #   image: "docker:stable-dind"
+    #   command:
+    #     - dockerd
+    #     - --host=unix:///var/run/docker.sock
+    #     - --host=tcp://0.0.0.0:8000
+    #   securityContext:
+    #     privileged: true
+    #   volumeMounts:
+    #     - mountPath: /var/run
+    #       name: cache-dir
+    # - name: clean-ci
+    #   image: "docker:stable"
+    #   command: ["/bin/sh"]
+    #   args:
+    #     - "-c"
+    #     - "docker info >/dev/null 2>&1; while [ $? -ne 0 ] ; do sleep 3; docker info >/dev/null 2>&1; done; docker pull library/busybox:latest; docker save -o busybox-latest.tar library/busybox:latest; docker rmi library/busybox:latest; while true; do sleep 86400; done"
+    #   volumeMounts:
+    #     - mountPath: /var/run
+    #       name: cache-dir
+
+    # - name: kubectl
+    #   image: bitnami/kubectl
+    #   command:
+    #     - cat
+    #   tty: true
+    #   volumeMounts:
+    #     - name: kube-config
+    #       mountPath: "/home/jenkins/.kube"
+    #       readOnly: false
+
+    - name: kaniko
+      image: zheng11581/kaniko-executor:debug
+      # image: zheng11581/kaniko-executor:51734fc3a33e04f113487853d118608ba6ff2b81
+      command:
+        - sleep
+      args:
+        - 99999
+      tty: true
+      volumeMounts:
+        - name: reg-secret
+          mountPath: /kaniko/.docker
+          readOnly: true
+
+  volumes:
+    - name: maven-repos # 缓存maven依赖
+      persistentVolumeClaim:
+        claimName: maven-pvc
+    - name: maven-settings # 注入settings.xml文件到容器
+      configMap:
+        name: maven-config
+    - name: kube-config # 注入kubeconfig文件到容器
+      hostPath:
+        path: "/root/.kube"
+    - name: cache-dir # 缓存image依赖
+      emptyDir: {}
+    - name: reg-secret # image registry的账号密码
+      secret:
+        secretName: regcred-ali
