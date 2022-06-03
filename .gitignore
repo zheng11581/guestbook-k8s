@@ -6,4 +6,5 @@
 **/.sts4-cache/*
 ../**/*
 *.out
+.vscode/*
 

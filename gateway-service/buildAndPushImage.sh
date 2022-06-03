@@ -2,6 +2,6 @@
 
 mvn package
 
-docker build -t art.local:8081/docker-local/guestbook-microservices-k8s/gateway-service:latest .
+docker build -t goharbor.com/demo/gateway-service:latest .
 
-docker push art.local:8081/docker-local/guestbook-microservices-k8s/gateway-service:latest
+docker push goharbor.com/demo/gateway-service:latest

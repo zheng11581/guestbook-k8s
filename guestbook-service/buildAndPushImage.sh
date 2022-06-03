@@ -2,6 +2,6 @@
 
 mvn package
 
-docker build -t art.local:8081/docker-local/guestbook-microservices-k8s/guestbook-service:latest .
+docker build -t goharbor.com/demo/guestbook-service:latest .
 
-docker push art.local:8081/docker-local/guestbook-microservices-k8s/guestbook-service:latest
+docker push goharbor.com/demo/guestbook-service:latest
