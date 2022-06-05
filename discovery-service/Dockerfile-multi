@@ -1,0 +1,10 @@
+# syntax = docker/dockerfile:experimental
+FROM maven:3.8.5-openjdk-8-slim as maven
+WORKDIR /discovery-service
+COPY . .
+RUN --mount=type=cache,target=/root/.m2,rw mvn -B package
+
+FROM azul/zulu-openjdk-alpine
+COPY --from=maven /discovery-service/target/discovery-service.jar discovery-service.jar
+ENTRYPOINT ["java", "-jar", "/discovery-service.jar"]
+EXPOSE 8761
