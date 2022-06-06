@@ -4,7 +4,7 @@ WORKDIR /discovery-service
 COPY . .
 RUN --mount=type=cache,target=/root/.m2,rw mvn -B package
 
-FROM azul/zulu-openjdk-alpine
+FROM azul/zulu-openjdk-alpine:8
 COPY --from=maven /discovery-service/target/discovery-service.jar discovery-service.jar
 ENTRYPOINT ["java", "-jar", "/discovery-service.jar"]
 EXPOSE 8761
