@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: gateway-service
-        image: 192.168.101.69:30080/guestbook/gateway-service:latest
+        image: oharbor.com/demo/gateway-service:latest
         ports:
         - containerPort: 8765
           protocol: TCP

@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: zipkin-service
-        image: 192.168.101.69:30080/guestbook/zipkin-service:latest
+        image: oharbor.com/demo/zipkin-service:latest
         env:
           - name: ZIPKIN_SERVER
             value: "zipkin-service"

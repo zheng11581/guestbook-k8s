@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: discovery-service
-        image: 192.168.101.69:30080/guestbook/discovery-service:latest
+        image: goharbor.com/demo/discovery-service:latest
         ports:
         - containerPort: 8761
           protocol: TCP
