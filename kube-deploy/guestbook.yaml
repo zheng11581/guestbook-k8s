@@ -13,7 +13,7 @@ spec:
     run: guestbook-service
   type: NodePort
 ---
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: guestbook-dev
@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: guestbook-service
-        image: oharbor.com/demo/guestbook-service:latest
+        image: goharbor.com/demo/guestbook-service:latest
         env:
           - name: ZIPKIN_SERVER
             value: "zipkin-service"

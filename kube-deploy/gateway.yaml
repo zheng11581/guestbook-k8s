@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: gateway-service
-        image: oharbor.com/demo/gateway-service:latest
+        image: goharbor.com/demo/gateway-service:latest
         ports:
         - containerPort: 8765
           protocol: TCP
