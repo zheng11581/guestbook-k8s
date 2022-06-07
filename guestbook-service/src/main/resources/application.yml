@@ -19,11 +19,8 @@ spring:
       hibernate:
         generate_statistics=true:
         format_sql=true:show-sql=true:#  zipkin:
-
-
-
-#  zipkin:
-#    base-url: http://zipkin-service.guestbook-dev:9411
+  zipkin:
+    base-url: http://zipkin-service.guestbook-dev:9411
 
 eureka:
   client:
@@ -62,11 +59,8 @@ spring:
       hibernate:
         generate_statistics=true:
         format_sql=true:show-sql=true:#  zipkin:
-
-
-
-#  zipkin:
-#    base-url: http://zipkin-service.guestbook-dev:9411
+  zipkin:
+    base-url: http://localhost:9411
 
 eureka:
   client:
