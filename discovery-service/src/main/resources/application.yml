@@ -17,13 +17,13 @@ eureka:
 ---
 
 spring:
-  profiles: docker
+  profiles: local
 
 eureka:
   numberRegistrySyncRetries: 1
   instance:
     preferIpAddress: true
-    hostname: discovery-service.guestbook-dev
+    hostname: localhost
   client:
     registerWithEureka: false
     fetchRegistry: false

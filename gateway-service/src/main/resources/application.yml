@@ -15,7 +15,7 @@ endpoints:
     sensitive: false
 
 zuul:
-#  prefix: /guestbook
+  prefix: /guestbook
   routes:
     guestbook:
       path: /**
@@ -32,6 +32,52 @@ eureka:
   client:
     serviceUrl:
       defaultZone:  ${DISCOVERY_URL:http://discovery-service.guestbook-dev:8761}/eureka/
+    registerWithEureka: false
+
+server:
+  port: 8765
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG
+
+---
+spring:
+  profiles: local
+  application:
+    name: gateway-server
+#  zipkin:
+#    base-url: http://${ZIPKIN_SERVER}:${ZIPKIN_SERVER_PORT}
+#  zipkin:
+#    base-url: http://zipkin-service.guestbook-dev:9411
+
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+zuul:
+  prefix: /guestbook
+  routes:
+    guestbook:
+      path: /**
+      serviceId: guestbook-service
+  ribbon:
+    eager-load:
+      enabled: true
+
+ribbon:
+  eureka:
+    enabled: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone:  ${DISCOVERY_URL:http://localhost:8761}/eureka/
     registerWithEureka: false
 
 server:
