@@ -61,11 +61,11 @@ zuul:
   prefix: /guestbook
   routes:
     guestbook:
-      path: /**
-      serviceId: guestbook-service
+    path: /**
+    serviceId: guestbook-service
   ribbon:
     eager-load:
-      enabled: true
+      enabled: false
 
 ribbon:
   eureka:

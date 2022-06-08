@@ -26,29 +26,8 @@
 
 # 部署方式 2： Kubernetes 部署
 
-## 2.1 配置免费本地 Docker 镜像中心 JFrog Container Registry 
-	
-1. 创建$JFROG_HOME环境变量。
-    
-    `export $JFROG_HOME=/Users/yourUser/.jfrog/JFROG_HOME`
-2. 创建 JCR 工作目录	
-```
-    mkdir -p $JFROG_HOME/jcr/var/etc/
-    cd $JFROG_HOME/jcr/var/etc/
-    touch ./system.yaml
-    chown -R 1030:1030 $JFROG_HOME/jcr/var
-	
-```
-3. 启动镜像
-
-    `docker run --name artifactory-jcr  -v $JFROG_HOME/jcr/var:/var/opt/jfrog/artifactory -p 8081:8081 -p 8082:8082 docker.bintray.io/jfrog/artifactory-jcr:latest`
-
-4. 登录
-	`docker login art.local:8081 -uadmin -ppassw0rd`
-
-
-注意：企业用户推荐使用 JFrog Artifactory 企业版,下载链接 wiki.jfrog.com		
-	
+## 2.1 配置Docker 镜像中心 
+		
 
 ## 2.2 启动 Minikube
 `curl-Lominikubehttp://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.30.0/minikube-darwin-amd64&&chmod+xminikube&&sudomvminikube/usr/local/bin/`
@@ -59,8 +38,8 @@
 ```
 minikube ssh
 su
-sudo echo "192.168.100.178 art.local mysql-server zipkin-server" >> /etc/hosts
-docker login  art.local:8081 -uadmin -ppassw0rd
+sudo echo "192.168.100.178 goharbor.com mysql-server zipkin-server" >> /etc/hosts
+docker login  goharbor.com -uadmin -ppassw0rd
 ```
 Add insecure registry for minikube:
 	~/.minikube/machines/minikube/config.json
@@ -68,11 +47,11 @@ Add insecure registry for minikube:
 ```
 "InsecureRegistry": [
                 "10.96.0.0/12",
-                "art.local"
+                "goharbor.com"
             ],
 ```
 ## 2.3 创建Kubernetes镜像秘钥
-`kubectl create secret docker-registry regcred-local --docker-server=art.local:8081 --docker-username=admin --docker-password=passw0rd --docker-email=wq237wq@gmail.com`			
+`kubectl create secret docker-registry regcred-local --docker-server=goharbor.com --docker-username=admin --docker-password=passw0rd --docker-email=wq237wq@gmail.com`			
 
 
 ## 2.4 构建并推送镜像
