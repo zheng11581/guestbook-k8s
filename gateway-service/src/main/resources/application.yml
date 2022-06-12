@@ -58,11 +58,13 @@ endpoints:
     sensitive: false
 
 zuul:
-  prefix: /guestbook
+  prefix: /guestbook/
+  stripPrefix: false
+  add-host-header: true
   routes:
     guestbook:
-    path: /**
-    serviceId: guestbook-service
+      path: /**
+      serviceId: guestbook-service
   ribbon:
     eager-load:
       enabled: false
